@@ -1,28 +1,34 @@
 package com.ems.backend.service;
 
 import com.ems.backend.dto.EmployeeDto;
+import com.ems.backend.entity.Department;
 import com.ems.backend.entity.Employee;
 import com.ems.backend.exception.ResourceNotFoundException;
 import com.ems.backend.mapper.EmployeeMapper;
+import com.ems.backend.repository.DepartmentRepository;
 import com.ems.backend.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
 
+        Department department = departmentRepository.findById(employeeDto.getDepartmentId()).orElseThrow(
+                () -> new ResourceNotFoundException("Department not found with id: " + employeeDto.getDepartmentId())
+        );
+
         Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
+        employee.setDepartment(department);
         Employee save = employeeRepository.save(employee);
 
         return EmployeeMapper.mapToEmployeeDto(save);
@@ -50,7 +56,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> getAllEmployee() {
-        List<Employee> all = employeeRepository.findAll();
+        List<Employee> all = employeeRepository.findAllByOrderByIdAsc();
 
         if (all.isEmpty()) {
             throw new ResourceNotFoundException("No employee found");
