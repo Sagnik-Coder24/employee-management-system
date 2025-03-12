@@ -21,6 +21,11 @@ const Header = () => {
                   Departments
                 </NavLink>
               </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/todos">
+                  To-Do
+                </NavLink>
+              </li>
             </ul>
           </div>
         </nav>

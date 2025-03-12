@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  deleteDepartment,
-  listDepartments,
-} from "../services/DepartmentService";
 import { useNavigate } from "react-router-dom";
+import { deleteTodo, listTodos, toggleComplete } from "../services/TodoService";
 
-const ListDepartment = () => {
+const ListTodo = () => {
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
@@ -15,7 +12,7 @@ const ListDepartment = () => {
   }, []);
 
   const getAll = () => {
-    listDepartments()
+    listTodos()
       .then((res) => {
         setData(res.data);
       })
@@ -24,16 +21,16 @@ const ListDepartment = () => {
       });
   };
 
-  const addNewDept = () => {
-    navigate("/add-department");
+  const addNewTodo = () => {
+    navigate("/add-todo");
   };
 
-  const updateDepartment = (id) => {
-    navigate(`/edit-department/${id}`);
+  const updateTodo = (id) => {
+    navigate(`/edit-todo/${id}`);
   };
 
-  const deleteDept = (id) => {
-    deleteDepartment(id)
+  const delTodo = (id) => {
+    deleteTodo(id)
       .then((res) => {
         console.log(res.data);
         getAll();
@@ -41,39 +38,49 @@ const ListDepartment = () => {
       .catch((err) => console.log(err));
   };
 
+  const toogle = (id) => {
+    toggleComplete(id)
+      .then((res) => {
+        getAll();
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="container mt-5 mb-5">
-      <h2 className="text-center mb-2">List of Departments</h2>
-      <button className="btn btn-primary mb-2" onClick={addNewDept}>
-        Add Department
-      </button>
-      <hr className="mb-5" />
+      <h2 className="text-center mb-4">List of TODOs</h2>
       <div className="table-responsive">
         <table className="table table-hover table-striped table-bordered">
           <thead className="thead-dark">
             <tr>
-              <th>Department Id</th>
-              <th>Department Name</th>
-              <th>Department Description</th>
+              <th>Too Title</th>
+              <th>Todo Description</th>
+              <th>Completed</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {data.map((item, index) => (
               <tr key={index}>
-                <td>{item.id}</td>
-                <td>{item.departmentName}</td>
-                <td>{item.departmentDescription}</td>
+                <td>{item.title}</td>
+                <td>{item.description}</td>
+                {item.completed ? <td>YES</td> : <td>NO</td>}
                 <td>
                   <button
-                    className="btn btn-info"
-                    onClick={() => updateDepartment(item.id)}
+                    className="btn btn-success w-25"
+                    onClick={() => toogle(item.id)}
+                  >
+                    {item.completed ? "In-Complete" : "Complete"}
+                  </button>
+                  <button
+                    className="btn btn-info ms-4"
+                    onClick={() => updateTodo(item.id)}
                   >
                     Update
                   </button>
                   <button
                     className="btn btn-danger ms-4"
-                    onClick={() => deleteDept(item.id)}
+                    onClick={() => delTodo(item.id)}
                   >
                     Delete
                   </button>
@@ -82,9 +89,11 @@ const ListDepartment = () => {
             ))}
           </tbody>
         </table>
+        <button className="btn btn-primary mt-4" onClick={addNewTodo}>
+          Add Todo
+        </button>
       </div>
     </div>
   );
 };
-
-export default ListDepartment;
+export default ListTodo;

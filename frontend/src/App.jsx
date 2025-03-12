@@ -6,6 +6,8 @@ import Header from "./components/Header";
 import ListDepartment from "./components/ListDepartment";
 import ListEmployee from "./components/ListEmployee";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import ListTodo from "./components/ListTodo";
+import Todo from "./components/Todo";
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
         <Route path="/departments" element={<ListDepartment />} />
         <Route path="/add-department" element={<Department />} />
         <Route path="/edit-department/:id" element={<Department />} />
+        <Route path="/todos" element={<ListTodo />} />
+        <Route path="/add-todo" element={<Todo />} />
+        <Route path="/edit-todo/:id" element={<Todo />} />
       </Routes>
 
       <Footer />
