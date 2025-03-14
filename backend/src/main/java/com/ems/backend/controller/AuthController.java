@@ -1,5 +1,6 @@
 package com.ems.backend.controller;
 
+import com.ems.backend.dto.LoginDto;
 import com.ems.backend.dto.RegisterDto;
 import com.ems.backend.service.AuthService;
 import lombok.AllArgsConstructor;
@@ -20,5 +21,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         return new ResponseEntity<>(authService.register(registerDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+        return new ResponseEntity<>(authService.login(loginDto), HttpStatus.OK);
     }
 }
