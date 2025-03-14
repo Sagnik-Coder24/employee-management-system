@@ -1,4 +1,4 @@
-package com.ems.backend.service;
+package com.ems.backend.service.impl;
 
 import com.ems.backend.dto.EmployeeDto;
 import com.ems.backend.entity.Department;
@@ -7,6 +7,7 @@ import com.ems.backend.exception.ResourceNotFoundException;
 import com.ems.backend.mapper.EmployeeMapper;
 import com.ems.backend.repository.DepartmentRepository;
 import com.ems.backend.repository.EmployeeRepository;
+import com.ems.backend.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

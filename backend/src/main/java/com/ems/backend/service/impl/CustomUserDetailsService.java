@@ -1,4 +1,4 @@
-package com.ems.backend.service;
+package com.ems.backend.service.impl;
 
 import com.ems.backend.entity.User;
 import com.ems.backend.exception.ResourceNotFoundException;
@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Set<GrantedAuthority> authorities = user.getRoles().stream().map(
                 role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet()
         );
-        
+
         return new org.springframework.security.core.userdetails.User(
                 usernameOrEmail,
                 user.getPassword(),

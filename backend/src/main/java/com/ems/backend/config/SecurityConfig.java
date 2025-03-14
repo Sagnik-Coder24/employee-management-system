@@ -36,6 +36,7 @@ public class SecurityConfig {
 //                        .requestMatchers(HttpMethod.PUT, "/api/todos/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.GET, "/api/todos/**").hasAnyRole("ADMIN", "USER")
 //                        .requestMatchers(HttpMethod.PATCH, "/api/todos/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers("/api/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
