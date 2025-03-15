@@ -3,6 +3,7 @@ package com.ems.backend.config;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -37,6 +38,7 @@ public class SecurityConfig {
 //                        .requestMatchers(HttpMethod.GET, "/api/todos/**").hasAnyRole("ADMIN", "USER")
 //                        .requestMatchers(HttpMethod.PATCH, "/api/todos/**").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

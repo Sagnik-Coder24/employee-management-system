@@ -135,7 +135,7 @@ const Department = () => {
                   }`}
                   onChange={(e) => setDepartmentDescription(e.target.value)}
                 />
-                {errors.lastName && (
+                {errors.departmentDescription && (
                   <>
                     <div className="invalid-feedback">
                       {errors.departmentDescription}

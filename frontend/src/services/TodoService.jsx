@@ -1,7 +1,20 @@
 import axios from "axios";
 import { BASE_URL } from "./Config";
+import { getToken } from "./AuthService";
 
 const REST_API_BASE_URL = BASE_URL + "api/todos";
+
+// Add a request interceptor
+axios.interceptors.request.use(
+  (config) => {
+    config.headers.Authorization = getToken();
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
 
 export const listTodos = () => axios.get(REST_API_BASE_URL);
 

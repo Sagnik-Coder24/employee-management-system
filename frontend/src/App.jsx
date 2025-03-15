@@ -8,6 +8,8 @@ import ListEmployee from "./components/ListEmployee";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import ListTodo from "./components/ListTodo";
 import Todo from "./components/Todo";
+import Register from "./components/Register";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/todos" element={<ListTodo />} />
         <Route path="/add-todo" element={<Todo />} />
         <Route path="/edit-todo/:id" element={<Todo />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
 
       <Footer />
