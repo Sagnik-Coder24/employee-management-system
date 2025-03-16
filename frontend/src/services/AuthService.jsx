@@ -27,15 +27,13 @@ export const storeToken = (token) => localStorage.setItem("token", token);
 export const getToken = () => localStorage.getItem("token");
 
 export const saveLoggedInUser = (username) =>
-  sessionStorage.setItem("authenticatedUser", username);
+  localStorage.setItem("authenticatedUser", username);
 
 export const isUserLoggedIn = () =>
-  sessionStorage.getItem("authenticatedUser") === null ? false : true;
+  localStorage.getItem("authenticatedUser") === null ? false : true;
 
-export const getLoggedInUser = () =>
-  sessionStorage.getItem("authenticatedUser");
+export const getLoggedInUser = () => localStorage.getItem("authenticatedUser");
 
 export const logout = () => {
   localStorage.clear();
-  sessionStorage.clear();
 };

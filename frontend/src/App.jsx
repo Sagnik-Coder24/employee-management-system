@@ -88,6 +88,7 @@ function App() {
             element={<Register setIsAuth={setIsAuth} />}
           />
           <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}
 
