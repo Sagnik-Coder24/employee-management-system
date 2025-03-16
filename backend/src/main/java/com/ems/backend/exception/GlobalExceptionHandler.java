@@ -1,5 +1,6 @@
 package com.ems.backend.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,7 +31,19 @@ public class GlobalExceptionHandler {
                         resourceNotFoundException.getMessage(),
                         webRequest.getDescription(false)
                 ),
-                org.springframework.http.HttpStatus.NOT_FOUND
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception, WebRequest webRequest) {
+        return new ResponseEntity<>(
+                new ErrorDetails(
+                        LocalDateTime.now(),
+                        exception.getMessage(),
+                        webRequest.getDescription(false)
+                ),
+                HttpStatus.BAD_REQUEST
         );
     }
 

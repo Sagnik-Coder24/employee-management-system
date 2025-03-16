@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginRest, storeToken } from "../services/AuthService";
+import {
+  getUserName,
+  isUserLoggedIn,
+  loginRest,
+  saveLoggedInUser,
+  storeToken,
+} from "../services/AuthService";
 
-const Login = () => {
+const Login = ({ setIsAuth }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
@@ -36,17 +42,18 @@ const Login = () => {
     return valid;
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (validForm()) {
       const user = { usernameOrEmail: username, password };
-      loginRest(user)
+      await loginRest(user)
         .then((res) => {
           console.log(res.data);
 
           const token = "Basic " + window.btoa(username + ":" + password);
-          console.log(token);
           storeToken(token);
+          saveLoggedInUser(username);
+          setIsAuth(isUserLoggedIn());
 
           setErr("");
           navigate("/employees");

@@ -3,6 +3,7 @@ package com.ems.backend.service.impl;
 import com.ems.backend.dto.LoginDto;
 import com.ems.backend.dto.RegisterDto;
 import com.ems.backend.entity.User;
+import com.ems.backend.exception.ResourceNotFoundException;
 import com.ems.backend.exception.TodoAPIException;
 import com.ems.backend.repository.RoleRepository;
 import com.ems.backend.repository.UserRepository;
@@ -56,9 +57,17 @@ public class AuthServiceImpl implements AuthService {
                 loginDto.getUsernameOrEmail(),
                 loginDto.getPassword()
         ));
-        
+
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 
         return "User logged-in successfully!";
+    }
+
+    @Override
+    public String getName(String usernameOrEmail) {
+        User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(
+                () -> new ResourceNotFoundException("User not found with username or email: " + usernameOrEmail)
+        );
+        return user.getName();
     }
 }

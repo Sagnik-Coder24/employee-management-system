@@ -25,4 +25,9 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
         return new ResponseEntity<>(authService.login(loginDto), HttpStatus.OK);
     }
+
+    @PostMapping("/getName")
+    public ResponseEntity<String> getName(@RequestBody String usernameOrEmail) {
+        return ResponseEntity.ok(authService.getName(usernameOrEmail));
+    }
 }

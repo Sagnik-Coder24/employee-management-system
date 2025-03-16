@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { registerUserRest } from "../services/AuthService";
+import {
+  isUserLoggedIn,
+  registerUserRest,
+  saveLoggedInUser,
+  storeToken,
+} from "../services/AuthService";
 import { Link, useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Register = ({ setIsAuth }) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -61,8 +66,14 @@ const Register = () => {
       registerUserRest(user)
         .then((res) => {
           console.log(res.data);
+
+          const token = "Basic " + window.btoa(username + ":" + password);
+          storeToken(token);
+          saveLoggedInUser(username);
+          setIsAuth(isUserLoggedIn());
+
           setErr("");
-          navigate("/login");
+          navigate("/todos");
         })
         .catch((err) => {
           console.error(err);
