@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   isUserLoggedIn,
+  loginRest,
   registerUserRest,
   saveLoggedInUser,
   storeToken,
@@ -67,13 +68,23 @@ const Register = ({ setIsAuth }) => {
         .then((res) => {
           console.log(res.data);
 
-          const token = "Basic " + window.btoa(username + ":" + password);
-          storeToken(token);
-          saveLoggedInUser(username);
-          setIsAuth(isUserLoggedIn());
+          const user = { usernameOrEmail: username, password };
+          loginRest(user)
+            .then((res) => {
+              const { accessToken, tokenType, role } = res.data;
+              const token = tokenType + " " + accessToken;
 
-          setErr("");
-          navigate("/todos");
+              storeToken(token);
+              saveLoggedInUser(username, role);
+              setIsAuth(isUserLoggedIn());
+
+              setErr("");
+              navigate("/employees");
+            })
+            .catch((err) => {
+              console.error(err);
+              setErr(err.response.data.message);
+            });
         })
         .catch((err) => {
           console.error(err);

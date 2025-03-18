@@ -67,14 +67,20 @@ const ListTodo = () => {
           <tbody>
             {data.map((item, index) => (
               <tr key={index}>
-                <td>{item.title}</td>
-                <td>{item.description}</td>
-                {item.completed ? <td>YES</td> : <td>NO</td>}
+                <td className={item.completed ? "text-secondary" : ""}>
+                  {item.title}
+                </td>
+                <td className={item.completed ? "text-secondary" : ""}>
+                  {item.description}
+                </td>
+                {item.completed ? (
+                  <td className="text-secondary">YES</td>
+                ) : (
+                  <td>NO</td>
+                )}
                 <td>
                   <button
-                    className={`btn btn-success ${
-                      isAdmin() ? "w-25" : "w-full"
-                    }`}
+                    className={`btn btn-success ${isAdmin() ? "w-25" : "w-75"}`}
                     onClick={() => toogle(item.id)}
                   >
                     {item.completed ? "In-Complete" : "Complete"}

@@ -4,7 +4,6 @@ import {
   isUserLoggedIn,
   loginRest,
   saveLoggedInUser,
-  saveLoggedInUserRole,
   storeToken,
 } from "../services/AuthService";
 
@@ -55,8 +54,7 @@ const Login = ({ setIsAuth }) => {
           const token = tokenType + " " + accessToken;
 
           storeToken(token);
-          saveLoggedInUser(username);
-          saveLoggedInUserRole(role);
+          saveLoggedInUser(username, role);
           setIsAuth(isUserLoggedIn());
 
           setErr("");

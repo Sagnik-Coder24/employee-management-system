@@ -26,11 +26,10 @@ export const storeToken = (token) => localStorage.setItem("token", token);
 
 export const getToken = () => localStorage.getItem("token");
 
-export const saveLoggedInUser = (username) =>
+export const saveLoggedInUser = (username, role) => {
   localStorage.setItem("authenticatedUser", username);
-
-export const saveLoggedInUserRole = (role) =>
   localStorage.setItem("authenticatedUserRole", role);
+};
 
 export const isUserLoggedIn = () =>
   localStorage.getItem("authenticatedUser") === null ? false : true;
