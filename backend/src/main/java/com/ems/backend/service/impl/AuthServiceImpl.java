@@ -1,7 +1,10 @@
 package com.ems.backend.service.impl;
 
+import com.ems.backend.config.JwtTokenProvider;
+import com.ems.backend.dto.JwtAuthResponse;
 import com.ems.backend.dto.LoginDto;
 import com.ems.backend.dto.RegisterDto;
+import com.ems.backend.entity.Role;
 import com.ems.backend.entity.User;
 import com.ems.backend.exception.ResourceNotFoundException;
 import com.ems.backend.exception.TodoAPIException;
@@ -18,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -28,6 +32,8 @@ public class AuthServiceImpl implements AuthService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
+    private JwtTokenProvider jwtTokenProvider;
+
 
     @Override
     public String register(RegisterDto registerDto) {
@@ -51,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(LoginDto loginDto) {
+    public JwtAuthResponse login(LoginDto loginDto) {
 
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsernameOrEmail(),
@@ -60,7 +66,22 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 
-        return "User logged-in successfully!";
+        User user = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("User not found with username or email: " + loginDto.getUsernameOrEmail())
+        );
+
+        Optional<Role> optionalRole = user.getRoles().stream().findFirst();
+        String roleName = null;
+
+        if (optionalRole.isPresent()) {
+            Role role = optionalRole.get();
+            roleName = role.getName();
+        }
+
+        return new JwtAuthResponse(
+                jwtTokenProvider.generateToken(authenticate),
+                roleName
+        );
     }
 
     @Override

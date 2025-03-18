@@ -1,5 +1,6 @@
 package com.ems.backend.controller;
 
+import com.ems.backend.dto.JwtAuthResponse;
 import com.ems.backend.dto.LoginDto;
 import com.ems.backend.dto.RegisterDto;
 import com.ems.backend.service.AuthService;
@@ -22,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto) {
         return new ResponseEntity<>(authService.login(loginDto), HttpStatus.OK);
     }
 

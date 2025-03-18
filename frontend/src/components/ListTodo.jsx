@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteTodo, listTodos, toggleComplete } from "../services/TodoService";
+import { getLoggedInUserRole } from "../services/AuthService";
 
 const ListTodo = () => {
   const [data, setData] = useState([]);
+  const [roles, setRoles] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     getAll();
+    setRoles(getLoggedInUserRole());
   }, []);
 
   const getAll = () => {
@@ -46,6 +49,8 @@ const ListTodo = () => {
       .catch((err) => console.log(err));
   };
 
+  const isAdmin = () => roles.includes("ADMIN");
+
   return (
     <div className="container mt-5 mb-5">
       <h2 className="text-center mb-4">List of TODOs</h2>
@@ -67,31 +72,39 @@ const ListTodo = () => {
                 {item.completed ? <td>YES</td> : <td>NO</td>}
                 <td>
                   <button
-                    className="btn btn-success w-25"
+                    className={`btn btn-success ${
+                      isAdmin() ? "w-25" : "w-full"
+                    }`}
                     onClick={() => toogle(item.id)}
                   >
                     {item.completed ? "In-Complete" : "Complete"}
                   </button>
-                  <button
-                    className="btn btn-info ms-4"
-                    onClick={() => updateTodo(item.id)}
-                  >
-                    Update
-                  </button>
-                  <button
-                    className="btn btn-danger ms-4"
-                    onClick={() => delTodo(item.id)}
-                  >
-                    Delete
-                  </button>
+                  {isAdmin() && (
+                    <button
+                      className="btn btn-info ms-4"
+                      onClick={() => updateTodo(item.id)}
+                    >
+                      Update
+                    </button>
+                  )}
+                  {isAdmin() && (
+                    <button
+                      className="btn btn-danger ms-4"
+                      onClick={() => delTodo(item.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <button className="btn btn-primary mt-4" onClick={addNewTodo}>
-          Add Todo
-        </button>
+        {isAdmin() && (
+          <button className="btn btn-primary mt-4" onClick={addNewTodo}>
+            Add Todo
+          </button>
+        )}
       </div>
     </div>
   );

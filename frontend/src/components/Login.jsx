@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  getUserName,
   isUserLoggedIn,
   loginRest,
   saveLoggedInUser,
+  saveLoggedInUserRole,
   storeToken,
 } from "../services/AuthService";
 
@@ -48,11 +48,15 @@ const Login = ({ setIsAuth }) => {
       const user = { usernameOrEmail: username, password };
       await loginRest(user)
         .then((res) => {
-          console.log(res.data);
+          // const token = "Basic " + window.btoa(username + ":" + password);
 
-          const token = "Basic " + window.btoa(username + ":" + password);
+          const { accessToken, tokenType, role } = res.data;
+
+          const token = tokenType + " " + accessToken;
+
           storeToken(token);
           saveLoggedInUser(username);
+          saveLoggedInUserRole(role);
           setIsAuth(isUserLoggedIn());
 
           setErr("");
